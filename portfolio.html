@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfólio de Artes Gráficas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { 
+            background-color: #1a1a1a; 
+            color: white; 
+            font-family: 'Segoe UI', sans-serif; 
+            padding: 20px 0; 
+        }
+        .page-title { 
+            text-align: center; 
+            margin-bottom: 40px; 
+            font-weight: 700; 
+        }
+        .portfolio-item { 
+            margin-bottom: 15px;
+            padding: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .portfolio-item:hover { 
+            transform: scale(1.02); 
+        }
+        .image-container {
+            width: 100%;
+            padding-bottom: 100%; /* Cria o aspecto quadrado */
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        .portfolio-img { 
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        /* Modal para imagem expandida */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        .modal-content {
+            max-width: 95%;
+            max-height: 95%;
+            object-fit: contain;
+            border-radius: 5px;
+            animation: zoomIn 0.3s ease;
+            transform-origin: center center;
+        }
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+            background: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        /* 3 COLUNAS EM TODAS AS TELAS */
+        .portfolio-item {
+            flex: 0 0 33.333333%;
+            max-width: 33.333333%;
+        }
+        
+        /* Ajuste para telas muito pequenas (opcional - se quiser 2 colunas em telas minúsculas) */
+        @media (max-width: 400px) {
+            .portfolio-item {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-title">Portfólio de Artes Gráficas</h1>
+        <div class="row g-1" id="portfolioGrid">
+            <div class="col-12 text-center">
+                <p>Coloque suas imagens na pasta "img" e atualize a lista abaixo com os nomes dos arquivos.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para imagem expandida -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="expandedImage">
+    </div>
+    
+    <script>
+        // ATUALIZE ESTA LISTA COM OS NOMES DOS SEUS ARQUIVOS (QUALQUER EXTENSÃO)
+        const imageFiles = [
+            "1 (1).webp",
+            "1 (10).webp",
+            "1 (100).webp",
+            "1 (101).webp",
+            "1 (102).webp",
+            "1 (103).webp",
+            "1 (104).webp",
+            "1 (106).webp",
+            "1 (107).webp",
+            "1 (108).webp",
+            "1 (109).webp",
+            "1 (11).webp",
+            "1 (111).webp",
+            "1 (112).webp",
+            "1 (113).webp",
+            "1 (12).webp",
+            "1 (14).webp",
+            "1 (15).webp",
+            "1 (16).webp",
+            "1 (17).webp",
+            "1 (18).webp",
+            "1 (19).webp",
+            "1 (21).webp",
+            "1 (22).webp",
+            "1 (23).webp",
+            "1 (24).webp",
+            "1 (26).webp",
+            "1 (28).webp",
+            "1 (29).webp",
+            "1 (3).webp",
+            "1 (30).webp",
+            "1 (31).webp",
+            "1 (32).webp",
+            "1 (33).webp",
+            "1 (34).webp",
+            "1 (35).webp",
+            "1 (36).webp",
+            "1 (38).webp",
+            "1 (39).webp",
+            "1 (40).webp",
+            "1 (41).webp",
+            "1 (42).webp",
+            "1 (45).webp",
+            "1 (46).webp",
+            "1 (47).webp",
+            "1 (48).webp",
+            "1 (49).webp",
+            "1 (5).webp",
+            "1 (50).webp",
+            "1 (51).webp",
+            "1 (52).webp",
+            "1 (54).webp",
+            "1 (55).webp",
+            "1 (56).webp",
+            "1 (57).webp",
+            "1 (58).webp",
+            "1 (59).webp",
+            "1 (6).webp",
+            "1 (60).webp",
+            "1 (61).webp",
+            "1 (62).webp",
+            "1 (63).webp",
+            "1 (64).webp",
+            "1 (65).webp",
+            "1 (66).webp",
+            "1 (67).webp",
+            "1 (68).webp",
+            "1 (69).webp",
+            "1 (70).webp",
+            "1 (71).webp",
+            "1 (72).webp",
+            "1 (73).webp",
+            "1 (74).webp",
+            "1 (76).webp",
+            "1 (77).webp",
+            "1 (78).webp",
+            "1 (8).webp",
+            "1 (80).webp",
+            "1 (81).webp",
+            "1 (82).webp",
+            "1 (83).webp",
+            "1 (84).webp",
+            "1 (85).webp",
+            "1 (86).webp",
+            "1 (87).webp",
+            "1 (88).webp",
+            "1 (89).webp",
+            "1 (9).webp",
+            "1 (92).webp",
+            "1 (93).webp",
+            "1 (95).webp",
+            "1 (97).webp",
+            "1 (99).webp"
+        ];
+        
+        function loadImages() {
+            const grid = document.getElementById('portfolioGrid');
+            grid.innerHTML = '';
+            
+            imageFiles.forEach((fileName, index) => {
+                const col = document.createElement('div');
+                col.className = 'col-4 portfolio-item';
+                
+                const container = document.createElement('div');
+                container.className = 'image-container';
+                
+                const img = document.createElement('img');
+                img.src = `img/${fileName}`;
+                img.alt = `Arte gráfica ${index + 1}`;
+                img.className = 'portfolio-img';
+                
+                // Adiciona evento de clique para expandir a imagem
+                img.addEventListener('click', function() {
+                    expandImage(this);
+                });
+                
+                img.onerror = function() {
+                    console.log(`Erro ao carregar: img/${fileName}`);
+                    this.style.backgroundColor = '#333';
+                    // Exibe mensagem de erro na imagem
+                    this.onerror = null; // Previne loop infinito
+                    this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii0wLjVlbSI+SW1hZ2VtIG7Do28gZW5jb250cmFkYTwvdGV4dD48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMC41ZW0iPid7ZmlsZU5hbWV9JzwvdGV4dD48L3N2Zz4=';
+                };
+                
+                container.appendChild(img);
+                col.appendChild(container);
+                grid.appendChild(col);
+            });
+        }
+        
+        // Função para expandir a imagem
+        function expandImage(img) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('expandedImage');
+            
+            modal.style.display = 'flex';
+            modalImg.src = img.src;
+            modalImg.alt = img.alt;
+            
+            // Fechar modal ao clicar no X
+            document.querySelector('.close').onclick = function() {
+                modal.style.display = 'none';
+            }
+            
+            // Fechar modal ao clicar fora da imagem
+            modal.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            }
+            
+            // Fechar modal com tecla ESC
+            document.addEventListener('keydown', function closeModal(event) {
+                if (event.key === 'Escape') {
+                    modal.style.display = 'none';
+                    document.removeEventListener('keydown', closeModal);
+                }
+            });
+        }
+        
+        window.addEventListener('DOMContentLoaded', loadImages);
+    </script>
+</body>
+</html>
